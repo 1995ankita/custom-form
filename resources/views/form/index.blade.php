@@ -64,7 +64,6 @@
         $('#mySelect').on('change', function() {
             // Get the selected value
             var selectedValue = $(this).val();
-
             // Make an AJAX request
             $.ajax({
                 type: 'POST', // or 'GET' depending on your needs
@@ -80,8 +79,6 @@
                     console.error("Error: " + error);
                 }
             });
-
-
         });
     });
 </script>
