@@ -23,12 +23,13 @@
                             <div class="card-header">
                                 <h3 class="card-title">Custom Fields</h3>
                                 <div class="float-right">
-                                    <select id="countryDropdown" class="form-control select" id="mySelect">
+                                    <select class="form-control select" id="mySelect">
                                         <option value="">Create Custom Field</option>
                                         <option value="1">Text Field</option>
                                         <option value="2">Select</option>
                                         <option value="3">Radio</option>
                                     </select>
+                                    </form>
                                 </div>
                             </div>
 
@@ -38,15 +39,26 @@
                                     <table class="table table-bordered" id="table">
                                         <thead>
                                             <tr>
-                                                {{-- <th scope="col">User Id</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Created At</th>
-                                            <th scope="col">Created By</th>
-                                            <th scope="col">Action</th> --}}
-
+                                                <th scope="col">Custom field</th>
+                                                <th scope="col">Short name</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+                                            @foreach ($custom_field as $field)
+                                                <tr>
+                                                    <td>{{ $field->name }}</td>
+                                                    <td>{{ $field->shortname }}</td>
+                                                    <td>{{ $field->type }}</td>
+                                                    <td>
+                                                        <a href="{{ route('form.show', $field->id) }}" class="fas fa-eye text-info"></a>
+                                                        <a href="{{ route('form.edit', $field->id) }}" class="fas fa-edit"></a>
+                                                        {{-- <a href="" class="fas fa-trash text-danger"></a> --}}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
 
@@ -58,27 +70,15 @@
         </section>
     </div>
 @endsection
-<script>
-    $(document).ready(function() {
-        // Attach the onchange event handler to the select field
-        $('#mySelect').on('change', function() {
-            // Get the selected value
-            var selectedValue = $(this).val();
-            // Make an AJAX request
-            $.ajax({
-                type: 'POST', // or 'GET' depending on your needs
-                url: 'your_backend_endpoint.php', // Replace with your actual backend endpoint
-                data: {
-                    selectedValue: selectedValue
-                },
-                success: function(response) {
-                    // Handle the response from the server
-                    $('#resultContainer').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error: " + error);
-                }
+
+@push('child-scripts')
+    <script>
+        $(document).ready(function() {
+            $('#mySelect').on('change', function() {
+                var selectedValue = $(this).val();
+                var redirectUrl = '{{ url('create-form-field') }}/' + selectedValue;
+                window.location.href = redirectUrl;
             });
         });
-    });
-</script>
+    </script>
+@endpush

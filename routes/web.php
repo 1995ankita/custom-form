@@ -19,3 +19,9 @@ use App\Http\Controllers\FormController;
 // });
 
 Route::get('/',             [FormController::class, 'index'])->name('form');
+
+Route::get('create-form-field/{field}', [FormController::class, 'create']);
+Route::post('save-form-text', [FormController::class, 'store'])->name('form.store');
+Route::get('/form/{id}/show', [FormController::class, 'show'])->name('form.show');
+Route::get('/form/{id}/edit', [FormController::class, 'edit'])->name('form.edit');
+Route::put('/form/{id}', [FormController::class, 'update'])->name('form.update');

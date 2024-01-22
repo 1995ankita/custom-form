@@ -215,26 +215,4 @@
 
 </html>
 
-<script>
-    $(document).ready(function() {
-        $('#countryDropdown').on('change', function() {
-            // var country_code = $(this).find(':selected').data('codeselect');
-            var country_code = $(this).val();
-            window.location.href = "/" + country_code + "/dashboard";
-           // changeCountry(country_code);
-        });
-    });
-    // function changeCountry(country_code) {
-    //     $.ajax({
-    //         url: "/" + country_code + "/country_change",
-    //         type: 'GET',
-    //         data: {country: country_code},
-    //         success: function(response) {
-    //             location.reload();
-    //         },
-    //         error: function(error) {
-    //             console.error('Error:', error);
-    //         }
-    //     });
-    // }
-</script>
+
