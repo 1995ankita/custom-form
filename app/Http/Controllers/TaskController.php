@@ -6,26 +6,36 @@ use Illuminate\Http\Request;
 use App\Models\CustomFieldField;
 use App\Http\Requests\FieldRequest;
 
-
-class FormController extends Controller
+class TaskController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request, $project_id, $board_id)
     {
-        $custom_field = CustomFieldField::all();
-        return view('form.index', compact('custom_field'));
+        $custom_field = CustomFieldField::where('categoryid', $board_id)->get();
+
+        return view('task.index', compact('project_id', 'board_id', 'custom_field'));
     }
-    public function create($field)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request, $project_id, $board_id, $field)
     {
         if ($field === 'text') {
-            return  view('form.text.create');
+            return  view('form.text.create', compact('project_id', 'board_id'));
         } elseif ($field === 'select') {
-            return  view('form.select.create');
+            return  view('form.select.create', compact('project_id', 'board_id'));
         } elseif ($field === 'radio') {
-            return  view('form.radio.create');
+            return  view('form.radio.create', compact('project_id', 'board_id'));
         }
     }
 
-    public function store(FieldRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store($project_id, $board_id, FieldRequest $request)
     {
         if ($request->input('type') == 'text') {
             $configDataJson = $this->FieldText($request);
@@ -41,25 +51,41 @@ class FormController extends Controller
             'description' => $request->input('description'),
             'descriptionformat' => $request->input('descriptionformat', 0),
             'sortorder' => $request->input('sortorder', 0),
-            'categoryid' =>1 ,
+            'categoryid' => $board_id,
             'configdata' => $configDataJson,
             'timecreated' => now()->timestamp,
             'timemodified' => now()->timestamp,
         ]);
-        return redirect()->route('form')->with('success',  $request->input('type') . 'Field Created Successfully.');
+        return redirect()->route('project.board.task.index', [$project_id, $board_id])->with('success',  $request->input('type') . 'Field Created Successfully.');
     }
-    public function edit($id)
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($project_id, $board_id, string $id)
     {
         $customField = CustomFieldField::findOrFail($id);
         if ($customField->type === 'text') {
-            return view('form.text.edit', compact('customField'));
+            return view('form.text.edit', compact('customField', 'project_id', 'board_id'));
         } elseif ($customField->type === 'select') {
-            return view('form.select.edit', compact('customField'));
+            return view('form.select.edit', compact('customField', 'project_id', 'board_id'));
         } elseif ($customField->type === 'radio') {
-            return view('form.radio.edit', compact('customField'));
+            return view('form.radio.edit', compact('customField', 'project_id', 'board_id'));
         }
     }
-    public function update(FieldRequest $request, $id)
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update($project_id, $board_id, FieldRequest $request, string $id)
     {
         $customField = CustomFieldField::findOrFail($id);
         if ($request->input('type') == 'text') {
@@ -81,18 +107,17 @@ class FormController extends Controller
             'timemodified' => now()->timestamp,
         ]);
 
-        return redirect()->route('form')->with('success',  $request->input('type') . 'Field Updated Successfully.');
+        return redirect()->route('project.board.task.index', [$project_id, $board_id])->with('success',  $request->input('type') . 'Field Updated Successfully.');
     }
-    public function show($id)
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($project_id, $board_id, $id)
     {
         $field = CustomFieldField::findOrFail($id);
-        if ($field->type === 'text') {
-            return view('form.text.show', compact('field'));
-        } elseif ($field->type === 'select') {
-            return view('form.select.show', compact('field'));
-        }elseif ($field->type === 'radio') {
-            return view('form.radio.show', compact('field'));
-        }
+        $field->delete();
+        return redirect()->route('project.board.task.index',[$project_id , $board_id])->with('danger',   'Field Deleted Successfully.');
     }
     public function FieldText($request)
     {
@@ -132,10 +157,5 @@ class FormController extends Controller
             'visibility' => $request->input('visibility', 0),
         ];
         return json_encode($configData);
-    }
-    public function delete($id){
-        $field = CustomFieldField::findOrFail($id);
-        $field->Delete();
-        return redirect()->route('form')->with('danger',   $field->type. 'Field Deleted Successfully.');
     }
 }

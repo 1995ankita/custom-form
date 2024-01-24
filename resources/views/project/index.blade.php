@@ -6,7 +6,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-12">
-                        <h1>CustomFields
+                        <h1>Project
 
                         </h1>
                     </div>
@@ -21,16 +21,10 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Custom Fields</h3>
-                                <div class="float-right">
-                                    <select class="form-control select" id="mySelect">
-                                        <option value="">Create Custom Field</option>
-                                        <option value="text">Text Field</option>
-                                        <option value="select">Select</option>
-                                        <option value="radio">Radio</option>
-                                    </select>
-                                    </form>
-                                </div>
+                                <h3 class="card-title">Project</h3>
+                                <div class="float-right"> <a class="btn btn-block btn-sm btn-success"
+                                        href="{{ route('project.create') }}"> Create New Project</a></div>
+
                             </div>
 
                             <!-- /.card-header -->
@@ -39,22 +33,21 @@
                                     <table class="table table-bordered" id="table">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Custom field</th>
-                                                <th scope="col">Short name</th>
-                                                <th scope="col">Type</th>
+                                                <th scope="col">Id</th>
+                                                <th scope="col">Project name</th>
+
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($custom_field as $field)
+                                            @foreach ($projects as $project)
                                                 <tr>
-                                                    <td>{{ $field->name }}</td>
-                                                    <td>{{ $field->shortname }}</td>
-                                                    <td>{{ $field->type }}</td>
+                                                    <td>{{ $project->id }}</td>
+                                                    <td>{{ $project->project }}</td>
                                                     <td>
-                                                        <a href="{{ route('form.show', $field->id) }}" class="fas fa-eye text-info"></a>
-                                                        <a href="{{ route('form.edit', $field->id) }}" class="fas fa-edit"></a>
-                                                        <a href="{{ route('form.delete', $field->id) }}" class="fas fa-trash text-danger"></a>
+                                                        <a href="{{ route('project.board.index',$project->id) }}" class="fas fa-plus"></a>
+                                                        <a href="{{ route('project.edit', $project->id) }}" class="fas fa-edit"></a>
+                                                        <a href="{{ route('project.destroy', $project->id) }}" class="fas fa-trash text-danger"></a>
                                                     </td>
                                                 </tr>
                                             @endforeach

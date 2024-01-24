@@ -47,14 +47,17 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($custom_field as $field)
+                                            @php
+                                                print_r($field->board->board);
+                                            @endphp
                                                 <tr>
                                                     <td>{{ $field->name }}</td>
                                                     <td>{{ $field->shortname }}</td>
                                                     <td>{{ $field->type }}</td>
                                                     <td>
-                                                        <a href="{{ route('form.show', $field->id) }}" class="fas fa-eye text-info"></a>
-                                                        <a href="{{ route('form.edit', $field->id) }}" class="fas fa-edit"></a>
-                                                        <a href="{{ route('form.delete', $field->id) }}" class="fas fa-trash text-danger"></a>
+                                                        {{-- <a href="{{ route('form.show', $field->id) }}" class="fas fa-eye text-info"></a> --}}
+                                                        <a href="{{ route('project.board.task.edit', [$project_id,$board_id,$field->id]) }}" class="fas fa-edit"></a>
+                                                        <a href="{{ route('project.board.task.destroy', [$project_id,$board_id,$field->id]) }}" class="fas fa-trash text-danger"></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -76,8 +79,8 @@
         $(document).ready(function() {
             $('#mySelect').on('change', function() {
                 var selectedValue = $(this).val();
-                var redirectUrl = '{{ url('create-form-field') }}/' + selectedValue;
-                window.location.href = redirectUrl;
+                var redirectUrl ='{{ route('project.board.task.create', [$project_id, $board_id, 'field_placeholder']) }}';
+                window.location.href = redirectUrl.replace('field_placeholder', selectedValue);
             });
         });
     </script>

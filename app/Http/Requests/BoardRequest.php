@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TextFieldRequest extends FormRequest
+class BoardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class TextFieldRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'shortname' => 'required',
-            'description'=>'required'
+            'board' => 'required',
         ];
     }
 }

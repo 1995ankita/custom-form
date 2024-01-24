@@ -28,12 +28,14 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>{{ $field->name }}</label>
-                                    <input type="{{ $field->type }}" id="{{ $field->shortname }}" class="form-control "
-                                        name="{{ $field->shortname }}"
-                                        @if (json_decode($field->configdata)->required == 'yes') required @endif
-                                        maxlength="{{json_decode($field->configdata)->maxlength}}"
-                                        size="{{json_decode($field->configdata)->displaysize}}" value="{{json_decode($field->configdata)->defaultvalue}}"   @if (json_decode($field->configdata)->locked != '0') disabled @endif
-                                        >
+                                    @php
+                                        $type = json_decode($field->configdata)->ispassword == 1 ? 'password' : 'text';
+                                    @endphp
+                                    <input type="{{ $type }}" id="{{ $field->shortname }}" class="form-control "
+                                        name="{{ $field->shortname }}" @if (json_decode($field->configdata)->required == 'yes') required @endif
+                                        maxlength="{{ json_decode($field->configdata)->maxlength }}"
+                                        size="{{ json_decode($field->configdata)->displaysize }}"
+                                        value="{{ json_decode($field->configdata)->defaultvalue }}">
                                     <span>{!! $field->description !!}</span>
                                 </div>
                             </form>

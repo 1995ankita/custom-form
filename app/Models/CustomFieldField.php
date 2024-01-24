@@ -13,4 +13,10 @@ class CustomFieldField extends Model
         'shortname', 'name', 'type', 'description', 'descriptionformat',
         'sortorder', 'categoryid', 'configdata', 'timecreated', 'timemodified'
     ];
+
+
+    public function board()
+    {
+        return $this->belongsTo(Board::class, 'categoryid');
+    }
 }
